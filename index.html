@@ -2,31 +2,38 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<title>DragonRealms Name Generator</title>
+	<style>
+		#results {white-space: pre;}
+	</style>
 </head>
 <body>
 <h1>Name Suggestions</h1>
 
+<div id="form">
+	<label for="language">Language</label>
+	<select id="language">
+		<option value="DWARVEN">Dwarven</option>
+		<option value="ELVEN">Elven</option>
+		<option value="GAMGWETH">Gamgweth</option>
+		<option value="GERENSHUGE">Gerenshuge</option>
+		<option value="GNOME">Gnome</option>
+		<option value="GOBLIN">Goblin</option>
+		<option value="GORBESH">Gorbesh</option>
+		<option value="MERELEW">Merelew</option>
+		<option value="OLVI">Olvi</option>
+		<option value="PRYDAEN">Prydaen</option>
+		<option value="RAKASH">Rakash</option>
+		<option value="SKRA">S'Kra</option>
+		<option value="TOGGISH">Toggish</option>
+	</select>
 
-<label for="language">Language</label>
-<select id="language">
-	<option value="DWARVEN">Dwarven</option>
-	<option value="ELVEN">Elven</option>
-	<option value="GAMGWETH">Gamgweth</option>
-	<option value="GERENSHUGE">Gerenshuge</option>
-	<option value="GNOME">Gnome</option>
-	<option value="GOBLIN">Goblin</option>
-	<option value="GORBESH">Gorbesh</option>
-	<option value="MERELEW">Merelew</option>
-	<option value="OLVI">Olvi</option>
-	<option value="PRYDAEN">Prydaen</option>
-	<option value="RAKASH">Rakash</option>
-	<option value="SKRA">S'Kra</option>
-	<option value="TOGGISH">Toggish</option>
-</select>
+	<button onclick="nextName()">Generate Name</button>
+</div>
 
-<button onclick="nextName()">Generate Name</button>
-
-<span id="name">Click the button!</span>
+<div id="results">
+<span id="name"></span>
+</div>
 
 <script>
 var LANGUAGESS = [];
@@ -184,10 +191,13 @@ nextName = function() {
 	}
 
 	// generate a word
-	var word = languageImitator.createWord();
+	var results = languageImitator.createWord();
+	for (var i = 0;i < 9;i++) {
+		results = results + "\n" + languageImitator.createWord();
+	}
 
-	// print the word
-	document.getElementById("name").textContent = word;
+	// print 10 words
+	document.getElementById("name").textContent = results;
 }
 </script>
 </body>
