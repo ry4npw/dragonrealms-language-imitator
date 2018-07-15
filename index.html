@@ -77,21 +77,23 @@ class LanguageImitator {
 			if (parts[i].length > 0) {
 				var vowelParts = parts[i].split(/[^AEIOUYaeiouy']/);
 				var consParts = parts[i].split(/[^BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz-]/);
+				var vowelBits = [];
+				var consBits = [];
 				for (var x = 0; x < vowelParts.length; x++) {
 					if (vowelParts[x].length > 0) {
-						this.vowelBits.push(vowelParts[x]);
+						vowelBits.push(vowelParts[x]);
 					}
 				}
 				for (var x = 0; x < consParts.length; x++) {
 					if (consParts[x].length > 0) {
-						this.consBits.push(consParts[x]);
+						consBits.push(consParts[x]);
 					}
 				}
-				if ((this.vowelBits.length > 0) && (parts[i].startsWith(this.vowelBits[0]))) {
-					for (var m = 0; m < this.vowelBits.length; m++) {
-						tmp = this.vowelBits[m];
-						if (this.consBits.length > m) {
-							tmp = tmp + this.consBits[m];
+				if ((vowelBits.length > 0) && (parts[i].startsWith(vowelBits[0]))) {
+					for (var m = 0; m < vowelBits.length; m++) {
+						tmp = vowelBits[m];
+						if (consBits.length > m) {
+							tmp = tmp + consBits[m];
 						}
 						this.vowelStartGroups.push(tmp);
 						if (m == 0) {
@@ -100,10 +102,10 @@ class LanguageImitator {
 						if (parts[i].endsWith(tmp)) {
 							this.vowelStartEnds.push(tmp);
 						}
-						if (this.vowelBits.length > m + 1) {
-							if (this.consBits.length > m) {
-								tmp = this.consBits[m];
-								tmp = tmp + this.vowelBits[m + 1];
+						if (vowelBits.length > m + 1) {
+							if (consBits.length > m) {
+								tmp = consBits[m];
+								tmp = tmp + vowelBits[m + 1];
 								this.consStartGroups.push(tmp);
 								if (parts[i].endsWith(tmp)) {
 									this.consStartEnds.push(tmp);
@@ -111,11 +113,11 @@ class LanguageImitator {
 							}
 						}
 					}
-				} else if ((this.consBits.length > 0) && (parts[i].startsWith(this.consBits[0]))) {
-					for (var m = 0; m < this.consBits.length; m++) {
-						if (this.vowelBits.length > m) {
-							tmp = this.consBits[m];
-							tmp = tmp + this.vowelBits[m];
+				} else if ((consBits.length > 0) && (parts[i].startsWith(consBits[0]))) {
+					for (var m = 0; m < consBits.length; m++) {
+						if (vowelBits.length > m) {
+							tmp = consBits[m];
+							tmp = tmp + vowelBits[m];
 							this.consStartGroups.push(tmp);
 							if (m == 0) {
 								this.consStarts.push(tmp);
@@ -124,10 +126,10 @@ class LanguageImitator {
 								this.consStartEnds.push(tmp);
 							}
 						}
-						if (this.consBits.length > m + 1) {
-							if (this.vowelBits.length > m) {
-								tmp =this.vowelBits[m];
-								tmp = tmp + this.consBits[m + 1];
+						if (consBits.length > m + 1) {
+							if (vowelBits.length > m) {
+								tmp =vowelBits[m];
+								tmp = tmp + consBits[m + 1];
 								this.vowelStartGroups.push(tmp);
 								if (parts[i].endsWith(tmp)) {
 									this.vowelStartEnds.push(tmp);
@@ -166,8 +168,6 @@ class LanguageImitator {
 	}
 
 	clear() {
-		this.vowelBits = [];
-		this.consBits = [];
 		this.consStartGroups = [];
 		this.consStarts = [];
 		this.consStartEnds = [];
