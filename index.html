@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+</head>
+<body>
+<h1></h1>
+
+<script>
+const DWARVEN = "nin barlate far khil talig  wroka  oks  garnaal twoma svik svirka  gagur  motarn  atir  bechae varsidh endagi draan  lopat  owl   ker  ker   danik   nakriin kaan  sawthstad   chavan kerhvil  lawn  lawne  midhar  forfedh   ankar  cha    grem   gremik   diwr  bodha  dwirn dwirna  stedh   kvidh  achar shon  ubil  nakvande naktika svunt sverfilis  ram  hildbuning, sarv  haast  hnuur  attika  flin  krewft  krewftis sve  lawt  fretae  kwinga sild  vut vut  atsoka  nawgar  tarshar  awthamshar  brathwrit  hawst snewrskridh  skorthrerg af  alar  bardh  aksil  tir  bak il  poba  skolot  bench  elding  svorsvaad svorsvaadik  krewftsmidh   hvark krag  hvarka  shaln derm lawp  hild viikbardh  va  vare  hleva  kran  siib vorn   fewdha  skeg knold  klowta galn thand  vaardh  vaarthe  hvil  sting sliir  oksikot  bowr   virhendae for   ale   almis hlefa   hlef  aftar  galawbe   kvidhar  girdel sverfae  ber  svorkni  twinda   vart  indar  tiga  dwern   fugal  grim   grima  grimis biisk svarthik svarth kveng taal  hrange  svadhe  hropa garnum    anane   rownd    kawpe  triif  kart  hlek grafil    hring    tivgradhis, tivis  milm  hlisa  ordha  matabe  hosta hliwa skarthe  bruga snipa, knifa  mirkik laathbrun  twil  os hverkae afvande  brathbok  tesk twiva  karg   drawm   glon  haald  liit   aws  thugur  nethur  onar  kveld  draefa  awg  brun trurik sowk   karlik    slaet  ande  smit  nud  enin  hend ewnenur";
+
+class LanguageImitator {
+	constructor() {
+		this.vowels = [ "a", "e", "i", "o", "u", "y", "\"" ];
+		this.consonants = [ "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z", "-" ];
+		this.alphabet = [ "a", "e", "i", "o", "u", "b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "y", "z" ];
+
+		this.vowelBits = [];
+		this.consBits = [];
+		this.consStartGroups = [];
+		this.consStarts = [];
+		this.consStartEnds = [];
+		this.vowelStartGroups = [];
+		this.vowelStarts = []
+		this.vowelStartEnds = [];
+	}
+
+	trainWords(words) {
+		var tmp = "";
+		var parts = words.split(/[^AEIOUYBCDFGHJKLMNPQRSTVWXZaeiouy'bcdfghjklmnpqrstvwxz-]/);
+		for (var i=0;i<parts.length;i++) {
+			if (parts[i].length > 0) {
+				console.log("part[" + i + "] = \"" + parts[i] + "\"");
+				var vowelParts = parts[i].split(/[^AEIOUYaeiouy']/);
+				var consParts = parts[i].split(/[^BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz-]/);
+				for (var x = 0; x < vowelParts.length; x++) {
+					if (vowelParts[x].length > 0) {
+						this.vowelBits.push(vowelParts[x]);
+					}
+				}
+				for (var x = 0; x < consParts.length; x++) {
+					if (consParts[x].length > 0) {
+						this.consBits.push(consParts[x]);
+					}
+				}
+				if ((this.vowelBits.length > 0) && (parts[i].startsWith(this.vowelBits[0]))) {
+					for (var m = 0; m < this.vowelBits.length; m++) {
+						tmp = this.vowelBits[m];
+						if (this.consBits.length > m) {
+							tmp = tmp + this.consBits[m];
+						}
+						this.vowelStartGroups.push(tmp);
+						if (m == 0) {
+							this.vowelStarts.push(tmp);
+						}
+						if (parts[i].endsWith(tmp)) {
+							this.vowelStartEnds.push(tmp);
+						}
+						if (this.vowelBits.length > m + 1) {
+							if (this.consBits.length > m) {
+								tmp = this.consBits[m];
+								tmp = tmp + this.vowelBits[m + 1];
+								this.consStartGroups.push(tmp);
+								if (parts[i].endsWith(tmp)) {
+									this.consStartEnds.push(tmp);
+								}
+							}
+						}
+					}
+				} else if ((this.consBits.length > 0) && (parts[i].startsWith(this.consBits[0]))) {
+					for (var m = 0; m < this.consBits.length; m++) {
+						if (this.vowelBits.length > m) {
+							tmp = this.consBits[m];
+							tmp = tmp + this.vowelBits[m];
+							this.consStartGroups.push(tmp);
+							if (m == 0) {
+								this.consStarts.push(tmp);
+							}
+							if (parts[i].endsWith(tmp)) {
+								this.consStartEnds.push(tmp);
+							}
+						}
+						if (this.consBits.length > m + 1) {
+							if (this.vowelBits.length > m) {
+								tmp =this.vowelBits[m];
+								tmp = tmp + this.consBits[m + 1];
+								this.vowelStartGroups.push(tmp);
+								if (parts[i].endsWith(tmp)) {
+									this.vowelStartEnds.push(tmp);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+let languageImitator = new LanguageImitator();
+languageImitator.trainWords(DWARVEN);
+</script>
+</body>
+</html>
+
