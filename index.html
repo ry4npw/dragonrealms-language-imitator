@@ -9,6 +9,16 @@
 <script>
 const DWARVEN = "nin barlate far khil talig  wroka  oks  garnaal twoma svik svirka  gagur  motarn  atir  bechae varsidh endagi draan  lopat  owl   ker  ker   danik   nakriin kaan  sawthstad   chavan kerhvil  lawn  lawne  midhar  forfedh   ankar  cha    grem   gremik   diwr  bodha  dwirn dwirna  stedh   kvidh  achar shon  ubil  nakvande naktika svunt sverfilis  ram  hildbuning, sarv  haast  hnuur  attika  flin  krewft  krewftis sve  lawt  fretae  kwinga sild  vut vut  atsoka  nawgar  tarshar  awthamshar  brathwrit  hawst snewrskridh  skorthrerg af  alar  bardh  aksil  tir  bak il  poba  skolot  bench  elding  svorsvaad svorsvaadik  krewftsmidh   hvark krag  hvarka  shaln derm lawp  hild viikbardh  va  vare  hleva  kran  siib vorn   fewdha  skeg knold  klowta galn thand  vaardh  vaarthe  hvil  sting sliir  oksikot  bowr   virhendae for   ale   almis hlefa   hlef  aftar  galawbe   kvidhar  girdel sverfae  ber  svorkni  twinda   vart  indar  tiga  dwern   fugal  grim   grima  grimis biisk svarthik svarth kveng taal  hrange  svadhe  hropa garnum    anane   rownd    kawpe  triif  kart  hlek grafil    hring    tivgradhis, tivis  milm  hlisa  ordha  matabe  hosta hliwa skarthe  bruga snipa, knifa  mirkik laathbrun  twil  os hverkae afvande  brathbok  tesk twiva  karg   drawm   glon  haald  liit   aws  thugur  nethur  onar  kveld  draefa  awg  brun trurik sowk   karlik    slaet  ande  smit  nud  enin  hend ewnenur";
 
+class Random {
+	nextBoolean() {
+		return Math.random() >= 0.5;
+	}
+
+	nextInt(max) {
+		return Math.floor(Math.random() * Math.floor(max));
+	}
+}
+
 class LanguageImitator {
 	constructor() {
 		this.vowels = [ "a", "e", "i", "o", "u", "y", "\"" ];
@@ -95,10 +105,33 @@ class LanguageImitator {
 			}
 		}
 	}
+
+	createWord() {
+		let rand = new Random();
+		var word = "";
+		if ((rand.nextBoolean()) && (this.vowelStarts.length > 0)) {
+			word = this.vowelStarts[rand.nextInt(this.vowelStarts.length)];
+			for (var i = 0; i < rand.nextInt(3); i++) {
+				word = word + this.vowelStartGroups[rand.nextInt(this.vowelStartGroups.length)];
+			}
+			word = word + this.vowelStartEnds[rand.nextInt(this.vowelStartEnds.length)];
+
+		} else {
+			word = this.consStarts[rand.nextInt(this.consStarts.length)];
+			for (var i = 0; i < rand.nextInt(3); i++) {
+				word = word + this.consStartGroups[rand.nextInt(this.consStartGroups.length)];
+			}
+			word = word + this.consStartEnds[rand.nextInt(this.consStartEnds.length)];
+		}
+
+		word = word.toLowerCase();
+		return word;
+	}
 }
 
 let languageImitator = new LanguageImitator();
 languageImitator.trainWords(DWARVEN);
+console.log(languageImitator.createWord());
 </script>
 </body>
 </html>
