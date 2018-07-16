@@ -4,14 +4,16 @@
 	<meta charset="UTF-8">
 	<title>DragonRealms Name Generator</title>
 	<style>
-		#results {white-space: pre;}
+		div {margin-bottom: 10px;}
+		/* support separate lines with LF ('\n') in textContent */
+		#names {white-space: pre;}
 	</style>
 </head>
 <body>
 <h1>Name Suggestions</h1>
 
 <div id="form">
-	<label for="language">Language</label>
+	<label for="language">Language:</label>
 	<select id="language">
 		<option value="DWARVEN">Dwarven</option>
 		<option value="ELVEN">Elven</option>
@@ -28,14 +30,15 @@
 		<option value="TOGGISH">Toggish</option>
 	</select>
 
-	<button onclick="nextName()">Generate</button>
+	<button onclick="generateNames()">Generate</button>
 </div>
 
 <div id="results">
-<span id="name"></span>
+	<span id="names"></span>
 </div>
 
 <script>
+// array of word lists for each language
 var LANGUAGESS = [];
 LANGUAGESS["SKRA"] = "Ae Ae'uraan'nido Aggahh'a Aggahhpel Ahar Ak Ama'hhrsk Ang Ang'hhrantin Anlusarabu Ap'gi Apodu Arna Ashu'a Athi Ati Botuk Da Dako D'epi Dikka Dikka'staho Dikka'staho'osson El Em Gamant Gamantang Gamant'hhshhth Grah Grel Grkhh'a Hat Hat Lav'ilo Havri'negh Heggarangi'hhs Iltamigen Heggarangi'n Heimary Heitak Heke Heke'mary Hekemhhg Hhan Hhan Hhr Hhr'ata Hhr'ibu Hhrkhi Hhrki Hhrki'izh Hhr'lav'geluhh Hhr'pao Hhrsk Hhr'tami Hhr'tami Hhs Hhshran Hhth Hhyssk'et Hhyssk'et Hhyssk'et Hirdu Hisakna Houmun Iltamigen Indakar Indakar Grkhh'a Inja Ira'tnah Irhhnth Iroepi Root Isthu'rath'a Izzu'hhr Izzu'hhr Grkhh'a Juludan Ka Kalri Kapo Ka'tamas K'dira Khiynit Kho Khor'vela Khozh Khur Khurmary Kiel Kor Kor'athi Kra'hei Ku Kudalata Kumu La Laar La'heke Lakh Lanahh Lanahh Pao Lanahh'Mus Lanahh'zhra Lanahh'zhra'naarti Lasarhhtha Lata Latagi Latagi'hhrs Em La'tami Lav'hhashhgi Lohogi'hhs'ur Lohogi'tel'tegreis L'ot-jukun'ta'n Luss Mahil Malk Malk Akom Malk'smo Mary Mehath Mehath'Gamant Mhhg Mur Mus Naarti Neh Nehda Nehdalata Nehdalata Nehel Nehelyvhh Nehelyvhh Nehgris Nehlata Nipoh Ograth Oloh Orthaan'inh Oshu Oshu'mary Oson Ospekk Pa Paguur Paha Pahami Pahami'lakh Pahamin Paht Papi Par Par'i Peh Peh'taph Pel Pel'arsharra Pel'hhsmur Pi Pi'botuk Pilonu Pishra Pivo'hrr'shu Pivo'hrr'shu'Mus Poho Poho'adu Poho'Danath Poho'hhsi Ur Pohokapo Pokeke Pokekehekepi Pokeke'pahamin Pokeke'pahamin Poloh'izh Polo'i Pon Pon'zh Por Por'nidrel Pran Py Q'alri Qi Q'zha Q'zhalata Rasha Rasha'hhsograth Rath'a saar Rath'amahilin Ru'ati Ru'at Sa Saar Saar'ati Dzree tanu saar'hhs oloh Saran'pon Saran'pon'hhs Peri'el Sarhhtha Sarkhhl Smo'neh Sha Shakhra Shana Sharaanpon'u Sharmiit'mhhg Shar'nath Shh'oi Shh'oi paguur Shh'oi Pohokapo Shh'oi'kumu Shh'oi'lata Shh'oi'lata Shhoi'sson Shh'oi'ur Shh'oiyvh-ur S'hhra Shra Sih S'Kra'ur Slo Slo ku pivo'hhr'shu Smo Smo'kku Smo'kku'par Smolg Smolgi Smo'neh Smozh Snrhhti Sra'ajhh Sraan S'rranteng S'sa S'shen S'su S'sugi Staho S'uh Suhhei Sur Sur'nidrel Sur'oson S'vaela Szeldia Taishar Tal Tami Tanu Tan'yi Tei'oloh Tei'oloh'lata Tei'oloh'lata T'ekeipa Tel Tel'rath'a Tey T'Lar Trefan Maug Trel Tuul Tys Tzgaa Tzgaa'hhsigen Tzgaa'hhsigen Uaro Uaro's'sugi Uen Uenlata Uenlata Uku'uan Uku'uan Uku'uanstaho Uku'uanstaho Ur Uraan'nido Urhhsu Ur'Kapo Pohokapo Ushuheke Vela'tohr Venda Venda Vuush Zasul Zh'al'hhm Zha'vazh Zhoss Zhra";
 LANGUAGESS["GAMGWETH"] = "vi urfe taisal naen wend narmor ia umato rhoat adamiras drov taisgweld hoyiro zynachi ae strad sisk shosuger hana boren bolg grusha gaddar forset diluger amachi modjelt raenaden raenadel zindublar foss selban sa oranfilt dyrisi ahle safir saet kruar mor dyrtais hara kirm tasia althmaor jalwestan stil lunmor stradmor filti taisgwelduan taisgwelger denban crofban shaka nabad anlora rom razak falban naroden naronas thilan croftans crof kho belu ha tol lerna rennisola sharshekhlo maor gelv gelvmor selbanta lom tyrnan miniso trekhalo gerwen gaenwen chelban mir shekhlo treban umos aren athor mapha sefilit chelmor halmir kirmneiv lasadinger renmor chel maormor fano sharu moria andun jalgelv falban saar dinnum H'Argir hentar karthar ensha kron sathra seord delwen andu dintoi gweld kweld ess guum jalmoda dyrgelv nemmiro westan zaul glays urrer lubasa ormo lanek sanyu sanuso esar bonfa nemma waerd phofer phofe frouler don dinrel orannel Darvager Darvagaen modi thia du swar seordav filt Modiarzi Garheg Gaenheg partani zohkhalo dinta afi misekar desan lommirit falmoda sumiwen wir av aev rachai Blufedor falathor erest narden achor achol maren glandal jeraya dinord aleth yavlor aes jalbreth lerban lethren jalmor lorma taisar murch lyodin nef nefsith tefabra waith telga marendin bima thoma negei berid makro gaenfilt hiro chelich lorjan ita sango delban jeolset halan elba elban hevor kobla alyin alyi anli atila sann lermor Gelvger Gelvgaen narkeden narkedel glan glaren mor telgi gelvdael modaleth blarstil blar tregwal gwalkhalo lerser selen Dosiger Dosigaen bael darva gar saaf kar dena fand abule tenra lasawen heyo rema heg kirmheg moreg sithren henmor sith siglan olkar olkan alyden tref feas morit arthemor zindu lof Thiager Thiagaen gwem audrumor janden ama jeol mish ce ve a' h' selmoda reste ziallam tumbra jalren selit pa henjal iala gwelder taru denenshon asmu hegessger glasith mivar lasadel teorn ren arthelun khalor khalo leor lor batar glensha ruris desdin vor zeng ban sanrar desu lasaden abues abuer neiv gath cambri thar dennat zindumor ord elir jantras jantrar ter amachiko ama lae jervir lomar sumilo murchban avren gerd desla anduwen nardel ker kerspen moda ordad athelda aman germish shuri ierna arti fandim remer shosu surmi din lasa lasager surmide pol halma din moyel selmor rae ziallar feir gam kus ul dilu kerwaith dael fostra kerfyn palan neivger reniso gaen ger noth lorat lort takur cubara bair glannoth scador kendabule kendiala renniso kendia biliren imir delenshon rela saleng telger fewna jalwir lert talan thervaen haleer haleen spen dotar fal Faltref hen lun potha valu nama namadren namteorn namater oran orasith oranther glansel uryn sel aevir albir alshabi ther therild arz dela theran baya selfit fulso zindalyi farn naroger narogaen aevan min cuir narodel yado jelt Angiger Angigaen gelfur tais ferse";
@@ -51,16 +54,30 @@ LANGUAGESS["GNOME"] = "Adaerna Alamgir Banii Benpar Biabo Callava Darsam Gadmado
 LANGUAGESS["GOBLIN"] = "Garum Goblin Grishnok Grodnek Tnok Vokan Kroan Grotok Oknok Muknoka";
 LANGUAGESS["MERELEW"] = "Amythiel Animoni Aojunni Arilana Charibdis Chuba Elrilad Galpelus Ghilthan Ichthyo Inziria Lerinuael Lithuya Reelite Telindris Tuvduk Deladrielas Saltspores Cam-anfa Inavia Selsaet Wule Cithraril Merelew Andreshlew Ithirhyl T'manasha";
 
+/**
+ * Random utility class
+ */
 class Random {
+	/**
+	 * Returns true or false at random.
+	 */
 	nextBoolean() {
 		return Math.random() >= 0.5;
 	}
 
+	/**
+	 * Returns a random integer between 0 and the max - 1.
+	 */
 	nextInt(max) {
 		return Math.floor(Math.random() * Math.floor(max));
 	}
 }
 
+/**
+ * This class will take a list of words (space separated) and use that list to
+ * learn patterns in letters.  Based on those patterns, it will then create new
+ * words using the createWord() function.
+ */
 class LanguageImitator {
 	constructor() {
 		this.vowels = [ "a", "e", "i", "o", "u", "y", "\"" ];
@@ -70,15 +87,22 @@ class LanguageImitator {
 		this.clear();
 	}
 
+	/**
+	 * Train the imitator with a list of valid words.
+	 */
 	trainWords(words) {
 		var tmp = "";
 		var parts = words.split(/[^AEIOUYBCDFGHJKLMNPQRSTVWXZaeiouy'bcdfghjklmnpqrstvwxz-]/);
+
+		// iterate through each word part
 		for (var i=0;i<parts.length;i++) {
 			if (parts[i].length > 0) {
 				var vowelParts = parts[i].split(/[^AEIOUYaeiouy']/);
 				var consParts = parts[i].split(/[^BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz-]/);
+				// temporary storage of vowel and consonant bits
 				var vowelBits = [];
 				var consBits = [];
+
 				for (var x = 0; x < vowelParts.length; x++) {
 					if (vowelParts[x].length > 0) {
 						vowelBits.push(vowelParts[x]);
@@ -89,7 +113,9 @@ class LanguageImitator {
 						consBits.push(consParts[x]);
 					}
 				}
+
 				if ((vowelBits.length > 0) && (parts[i].startsWith(vowelBits[0]))) {
+					// when the part starts with a vowel
 					for (var m = 0; m < vowelBits.length; m++) {
 						tmp = vowelBits[m];
 						if (consBits.length > m) {
@@ -114,6 +140,7 @@ class LanguageImitator {
 						}
 					}
 				} else if ((consBits.length > 0) && (parts[i].startsWith(consBits[0]))) {
+					// when the part starts with a consonant
 					for (var m = 0; m < consBits.length; m++) {
 						if (vowelBits.length > m) {
 							tmp = consBits[m];
@@ -142,9 +169,15 @@ class LanguageImitator {
 		}
 	}
 
+	/**
+	 * Create a word by randomly putting together alternating consonants and
+	 * vowels.
+	 */
 	createWord() {
 		let rand = new Random();
 		var word = "";
+
+		// randomly start with a vowel or consonant
 		if ((rand.nextBoolean()) && (this.vowelStarts.length > 0)) {
 			word = this.vowelStarts[rand.nextInt(this.vowelStarts.length)];
 			for (var i = 0; i < rand.nextInt(3); i++) {
@@ -160,13 +193,19 @@ class LanguageImitator {
 			word = word + this.consStartEnds[rand.nextInt(this.consStartEnds.length)];
 		}
 
+		// in some cases, a word is not generated. if that happens, try again.
 		if (word == "") {
 			return this.createWord();
 		}
+
+		// convert to lowercase for consistency
 		word = word.toLowerCase();
 		return word;
 	}
 
+	/**
+	 * Reset the LanguageImitator so that a new word list can be trained.
+	 */
 	clear() {
 		this.consStartGroups = [];
 		this.consStarts = [];
@@ -181,7 +220,10 @@ let languageImitator = new LanguageImitator();
 let language = document.getElementById("language").value;
 languageImitator.trainWords(LANGUAGESS[language]);
 
-nextName = function() {
+/**
+ * Create ten random names when called by the "Generate" button.
+ */
+generateNames = function() {
 	// set up the dictionary
 	var selectedLanguage = document.getElementById("language").value;
 	if (selectedLanguage != language) {
@@ -190,14 +232,14 @@ nextName = function() {
 		languageImitator.trainWords(LANGUAGESS[language]);
 	}
 
-	// generate a word
+	// generate 10 names
 	var results = languageImitator.createWord();
 	for (var i = 0;i < 9;i++) {
 		results = results + "\n" + languageImitator.createWord();
 	}
 
-	// print 10 words
-	document.getElementById("name").textContent = results;
+	// print names
+	document.getElementById("names").textContent = results;
 }
 </script>
 </body>
