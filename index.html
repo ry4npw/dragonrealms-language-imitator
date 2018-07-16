@@ -77,6 +77,10 @@ class Random {
  * This class will take a list of words (space separated) and use that list to
  * learn patterns in letters.  Based on those patterns, it will then create new
  * words using the createWord() function.
+ *
+ * The way this works is by learning patterns such as consonant-vowel or vowel-
+ * consonant when calling trainWords. The createWords call then puts these
+ * groups back together in random order to mimic patterns it learned.
  */
 class LanguageImitator {
 	constructor() {
