@@ -88,29 +88,34 @@ class LanguageImitator {
 	}
 
 	/**
-	 * Train the imitator with a list of valid words.
+	 * Train the imitator with a list of valid words.  The imitator does this by
+	 * splitting words into groups of a vowel followed by zero or more
+	 * consonants or groups of consonants followed by zero or more vowels.
 	 */
 	trainWords(words) {
 		var tmp = "";
 		var parts = words.split(/[^AEIOUYBCDFGHJKLMNPQRSTVWXZaeiouy'bcdfghjklmnpqrstvwxz-]/);
 
 		// iterate through each word part
-		for (var i=0;i<parts.length;i++) {
+		for (var i = 0; i < parts.length; i++) {
 			if (parts[i].length > 0) {
-				// split the part into vowels and consonants
+				// split the word on vowel boundaries
 				var vowelParts = parts[i].split(/[^AEIOUYaeiouy']/);
+				// split the word on consonant boundaries
 				var consParts = parts[i].split(/[^BCDFGHJKLMNPQRSTVWXZbcdfghjklmnpqrstvwxz-]/);
 
 				// temporary storage of vowel and consonant bits
 				var vowelBits = [];
 				var consBits = [];
 
-				// turn the parts into bits
+				// collect the vowel bits of the word
 				for (var x = 0; x < vowelParts.length; x++) {
 					if (vowelParts[x].length > 0) {
 						vowelBits.push(vowelParts[x]);
 					}
 				}
+
+				// collect the consonant bits of the word
 				for (var x = 0; x < consParts.length; x++) {
 					if (consParts[x].length > 0) {
 						consBits.push(consParts[x]);
@@ -118,53 +123,46 @@ class LanguageImitator {
 				}
 
 				if ((vowelBits.length > 0) && (parts[i].startsWith(vowelBits[0]))) {
-					// when the part starts with a vowel
+					// when the word starts with a vowel
 					for (var m = 0; m < vowelBits.length; m++) {
+						// add the vowel and following consonants
 						tmp = vowelBits[m];
 						if (consBits.length > m) {
 							tmp = tmp + consBits[m];
 						}
-						this.vowelStartGroups.push(tmp);
+
+						// add the part to vowelGroups
+						this.vowelGroups.push(tmp);
+
+						// at the beginning of the word, add to Starts
 						if (m == 0) {
 							this.vowelStarts.push(tmp);
 						}
+
+						// at the end of the word, add to Ends
 						if (parts[i].endsWith(tmp)) {
-							this.vowelStartEnds.push(tmp);
-						}
-						if (vowelBits.length > m + 1) {
-							if (consBits.length > m) {
-								tmp = consBits[m];
-								tmp = tmp + vowelBits[m + 1];
-								this.consStartGroups.push(tmp);
-								if (parts[i].endsWith(tmp)) {
-									this.consStartEnds.push(tmp);
-								}
-							}
+							this.vowelEnds.push(tmp);
 						}
 					}
 				} else if ((consBits.length > 0) && (parts[i].startsWith(consBits[0]))) {
 					// when the part starts with a consonant
 					for (var m = 0; m < consBits.length; m++) {
+						tmp = consBits[m];
 						if (vowelBits.length > m) {
-							tmp = consBits[m];
 							tmp = tmp + vowelBits[m];
-							this.consStartGroups.push(tmp);
-							if (m == 0) {
-								this.consStarts.push(tmp);
-							}
-							if (parts[i].endsWith(tmp)) {
-								this.consStartEnds.push(tmp);
-							}
 						}
-						if (consBits.length > m + 1) {
-							if (vowelBits.length > m) {
-								tmp =vowelBits[m];
-								tmp = tmp + consBits[m + 1];
-								this.vowelStartGroups.push(tmp);
-								if (parts[i].endsWith(tmp)) {
-									this.vowelStartEnds.push(tmp);
-								}
-							}
+
+						// add the part to consonantGroups
+						this.consonantGroups.push(tmp);
+
+						// at the beginning of the word, add to Starts
+						if (m == 0) {
+							this.consonantStarts.push(tmp);
+						}
+
+						// at the end of the word, add to Ends
+						if (parts[i].endsWith(tmp)) {
+							this.consonantEnds.push(tmp);
 						}
 					}
 				}
@@ -175,6 +173,13 @@ class LanguageImitator {
 	/**
 	 * Create a word by randomly putting together alternating consonants and
 	 * vowels.
+	 *
+	 * Words are created randomly by:
+	 *   1. determining with rand.nextBoolean() whether to use consonant or
+	 *      vowel groups
+	 *   2. taking a single vowel/consonant Starts
+	 *   3. adding 0, 1, or 2 random vowel/consonant Groups
+	 *   4. adding a single vowel/consonant Ends
 	 */
 	createWord() {
 		let rand = new Random();
@@ -182,23 +187,24 @@ class LanguageImitator {
 
 		// randomly start with a vowel or consonant
 		if ((rand.nextBoolean()) && (this.vowelStarts.length > 0)) {
+			// adding vowel start
 			word = this.vowelStarts[rand.nextInt(this.vowelStarts.length)];
 			for (var i = 0; i < rand.nextInt(3); i++) {
-				word = word + this.vowelStartGroups[rand.nextInt(this.vowelStartGroups.length)];
+				// adding middle vowel group
+				word = word + this.vowelGroups[rand.nextInt(this.vowelGroups.length)];
 			}
-			word = word + this.vowelStartEnds[rand.nextInt(this.vowelStartEnds.length)];
+			// adding vowel end
+			word = word + this.vowelEnds[rand.nextInt(this.vowelEnds.length)];
 
-		} else if (this.consStarts.length > 0) {
-			word = this.consStarts[rand.nextInt(this.consStarts.length)];
+		} else if (this.consonantStarts.length > 0) {
+			// adding consonant start
+			word = this.consonantStarts[rand.nextInt(this.consonantStarts.length)];
 			for (var i = 0; i < rand.nextInt(3); i++) {
-				word = word + this.consStartGroups[rand.nextInt(this.consStartGroups.length)];
+				// adding middle consonant group
+				word = word + this.consonantGroups[rand.nextInt(this.consonantGroups.length)];
 			}
-			word = word + this.consStartEnds[rand.nextInt(this.consStartEnds.length)];
-		}
-
-		// in some cases, a word is not generated. if that happens, try again.
-		if (word == "") {
-			return this.createWord();
+			// adding consonant end
+			word = word + this.consonantEnds[rand.nextInt(this.consonantEnds.length)];
 		}
 
 		// convert to lowercase for consistency
@@ -210,12 +216,18 @@ class LanguageImitator {
 	 * Reset the LanguageImitator so that a new word list can be trained.
 	 */
 	clear() {
-		this.consStartGroups = [];
-		this.consStarts = [];
-		this.consStartEnds = [];
-		this.vowelStartGroups = [];
+		// all groups starting with a consonant followed by zero or more vowels
+		this.consonantGroups = [];
+		// consonantStarts are consonantGroups that start a word
+		this.consonantStarts = [];
+		// consonantEnds are consonantGroups that end a word
+		this.consonantEnds = [];
+		// all groups starting with a vowel followed by zero or more consonants
+		this.vowelGroups = [];
+		// vowelStarts are vowelGroups that start a word
 		this.vowelStarts = []
-		this.vowelStartEnds = [];
+		// vowelEnds are vowelGroups that end a word
+		this.vowelEnds = [];
 	}
 }
 
@@ -230,18 +242,19 @@ generateNames = function() {
 	// set up the dictionary
 	var selectedLanguage = document.getElementById("language").value;
 	if (selectedLanguage != language) {
-		languageImitator.clear();
+		// the language changed so retrain the imitator
 		language = selectedLanguage;
+		languageImitator.clear();
 		languageImitator.trainWords(LANGUAGES[language]);
 	}
 
-	// generate 10 names
+	// generate a string of 10 names
 	var results = languageImitator.createWord();
 	for (var i = 0;i < 9;i++) {
 		results = results + "\n" + languageImitator.createWord();
 	}
 
-	// print names
+	// write string to DOM
 	document.getElementById("names").textContent = results;
 }
 </script>
