@@ -4,9 +4,19 @@
 	<meta charset="UTF-8">
 	<title>DragonRealms Name Generator</title>
 	<style>
-		div {margin-bottom: 10px;}
-		/* support separate lines with LF ('\n') in textContent */
-		#names {white-space: pre;}
+		body {
+			font-family:sans-serif;
+			font-size: 16px;
+		}
+
+		div {
+			margin-bottom: 10px;
+		}
+
+		#names {
+			/* support separate lines with LF ('\n') in textContent */
+			white-space: pre;
+		}
 	</style>
 </head>
 <body>
@@ -15,13 +25,13 @@
 <div id="form">
 	<label for="language">Language:</label>
 	<select id="language">
-		<option value="DWARVEN">Dwarven</option>
-		<option value="ELVEN">Elven</option>
 		<option value="GAMGWETH">Gamgweth</option>
 		<option value="GERENSHUGE">Gerenshuge</option>
 		<option value="GNOME">Gnome</option>
 		<option value="GOBLIN">Goblin</option>
 		<option value="GORBESH">Gorbesh</option>
+		<option value="DWARVEN">Haakish</option>
+		<option value="ELVEN">Ilithic</option>
 		<option value="MERELEW">Merelew</option>
 		<option value="OLVI">Olvi</option>
 		<option value="PRYDAEN">Prydaen</option>
@@ -66,7 +76,7 @@ class Random {
 	}
 
 	/**
-	 * Returns a random integer between 0 and the max - 1.
+	 * Returns a random integer between 0 and (max - 1).
 	 */
 	nextInt(max) {
 		return Math.floor(Math.random() * Math.floor(max));
@@ -236,7 +246,7 @@ let language = document.getElementById("language").value;
 languageImitator.trainWords(LANGUAGES[language]);
 
 /**
- * Create ten random names when called by the "Generate" button.
+ * Create random names when called by the "Generate" button.
  */
 generateNames = function() {
 	// set up the dictionary
